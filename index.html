@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Smitha Soman · ML & Embedded Engineer</title>
+<meta name="description" content="Smitha Soman — embedded software engineer (Bosch, Navistar) turned ML engineer. M.S. in Artificial Intelligence at San José State University. Seeking Summer 2027 internships.">
+<meta property="og:title" content="Smitha Soman · ML & Embedded Engineer">
+<meta property="og:description" content="From engine control units to neural networks. M.S. AI @ SJSU, ex-Bosch, ex-Navistar.">
+<meta name="theme-color" content="#070d1a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500;700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: one long "signal path" — hero oscilloscope that resolves into a network, then projects first, engineering experience, about, skills, contact. */
+:root{
+  --bg:#070d1a; --bg2:#0b1426; --panel:#0f1a30; --line:#1f2f4d; --fg:#e8eef8; --muted:#8ea0bd;
+  --accent:#4da3ff; --accent2:#7dd3fc; --warn:#fbbf6a; --glow:rgba(77,163,255,.20); --on-accent:#03122a;
+  --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme:dark;
+}
+:root[data-theme="light"]{
+  --bg:#f4f7fc; --bg2:#e8eef8; --panel:#ffffff; --line:#d3ddec; --fg:#0e1a2e; --muted:#4f6383;
+  --accent:#1d64d8; --accent2:#0b84c4; --warn:#a86400; --glow:rgba(29,100,216,.12); --on-accent:#ffffff; color-scheme:light;
+}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]){
+  --bg:#f4f7fc; --bg2:#e8eef8; --panel:#ffffff; --line:#d3ddec; --fg:#0e1a2e; --muted:#4f6383;
+  --accent:#1d64d8; --accent2:#0b84c4; --warn:#a86400; --glow:rgba(29,100,216,.12); --on-accent:#ffffff; color-scheme:light; } }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+img{max-width:100%}
+::selection{background:var(--accent);color:var(--bg)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px}
+.mono{font-family:var(--mono)}
+
+/* background grid + cursor glow */
+.grid-bg{position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:56px 56px;opacity:.25;mask-image:radial-gradient(ellipse at 50% 0%,#000 30%,transparent 75%)}
+.glow{position:fixed;width:520px;height:520px;border-radius:50%;z-index:-1;pointer-events:none;
+  background:radial-gradient(circle,var(--glow),transparent 65%);transform:translate(-50%,-50%);left:50%;top:20%;transition:opacity .3s}
+
+/* nav */
+.progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));z-index:60}
+nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:color-mix(in srgb,var(--bg) 78%,transparent);border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent);padding-top:env(safe-area-inset-top,0px)}
+nav .wrap{display:flex;align-items:center;gap:16px;height:60px}
+.logo{font-family:var(--mono);font-weight:700;text-decoration:none;display:flex;gap:8px;align-items:center}
+.logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2.4s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.navlinks{display:flex;gap:4px;margin-left:auto;font-family:var(--mono);font-size:13px}
+.navlinks a{text-decoration:none;color:var(--muted);padding:6px 10px;border-radius:6px}
+.navlinks a:hover,.navlinks a.on{color:var(--fg);background:var(--panel)}
+.menu{display:none;background:none;border:1px solid var(--line);color:var(--fg);border-radius:8px;height:36px;padding:0 12px;font:13px var(--mono);cursor:pointer}
+.theme{background:none;border:1px solid var(--line);color:var(--fg);border-radius:8px;width:36px;height:36px;cursor:pointer;font-size:16px}
+@media (max-width:760px){.menu{display:block;margin-left:auto}.navlinks{display:none;position:absolute;top:60px;left:0;right:0;flex-direction:column;padding:10px 20px 16px;background:var(--bg);border-bottom:1px solid var(--line)}.navlinks.open{display:flex}.navlinks a{padding:10px 12px;font-size:15px}}
+
+/* hero */
+.hero{position:relative;padding-block:72px 40px}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.status{display:inline-flex;gap:10px;align-items:center;font-family:var(--mono);font-size:12.5px;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);background:color-mix(in srgb,var(--accent) 8%,transparent);padding:6px 12px;border-radius:999px}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.6s infinite}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,6.2vw,4.6rem);line-height:1.02;letter-spacing:-.03em;margin:18px 0 18px;text-wrap:balance}
+h1 .grad{background:linear-gradient(100deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:1.15rem;color:var(--muted);max-width:56ch;margin:0 0 26px}
+.lede b{color:var(--fg);font-weight:600}
+.ctas{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font-family:var(--mono);font-size:14px;text-decoration:none;padding:11px 16px;border-radius:9px;border:1px solid var(--line);background:var(--panel);display:inline-flex;gap:8px;align-items:center;transition:transform .15s,border-color .15s}
+.btn:hover{transform:translateY(-2px);border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:700}
+.scope{position:relative;border:1px solid var(--line);border-radius:16px;background:linear-gradient(180deg,var(--panel),var(--bg2));overflow:hidden;aspect-ratio:1/1;max-width:100%}
+.scope canvas{width:100%;height:100%;display:block}
+.scope .hud{position:absolute;left:14px;right:14px;top:12px;display:flex;justify-content:space-between;font:12px var(--mono);color:var(--muted)}
+.scope .hud b{color:var(--accent);font-weight:500}
+.scope .cap{position:absolute;left:14px;bottom:12px;font:12px var(--mono);color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:44px}
+@media (max-width:700px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{border:1px solid var(--line);border-radius:12px;padding:16px;background:color-mix(in srgb,var(--panel) 70%,transparent)}
+.stat b{display:block;font-family:var(--display);font-size:2rem;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat span{font:12.5px var(--mono);color:var(--muted)}
+
+/* sections */
+section{padding-block:72px}
+.eyebrow{font:13px var(--mono);color:var(--accent);letter-spacing:.06em}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,4vw,2.8rem);letter-spacing:-.025em;line-height:1.1;margin:8px 0 14px;text-wrap:balance}
+.sub{color:var(--muted);max-width:62ch;margin:0 0 36px}
+
+/* terminal */
+.term{border:1px solid var(--line);border-radius:14px;background:#050a14;color:#d4e3f7;font:13.5px/1.7 var(--mono);overflow:hidden}
+:root[data-theme="light"] .term{background:#0d1117}
+.term-bar{display:flex;gap:7px;padding:10px 14px;border-bottom:1px solid #16243b;align-items:center}
+.term-bar i{width:11px;height:11px;border-radius:50%;background:#ff5f57}.term-bar i:nth-child(2){background:#febc2e}.term-bar i:nth-child(3){background:#28c840}
+.term-bar span{margin-left:8px;color:#6f8396;font-size:12px}
+.term pre{margin:0;padding:16px 18px;white-space:pre-wrap;min-height:220px}
+.term .p{color:#4da3ff}.term .c{color:#6f8396}.term .k{color:#7dd3fc}.term .cursor{display:inline-block;width:8px;height:15px;background:#4da3ff;vertical-align:-2px;animation:pulse 1s steps(1) infinite}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
+@media (max-width:900px){.about-grid{grid-template-columns:1fr}}
+.about-grid p{margin:0 0 14px;max-width:60ch}
+
+/* timeline */
+.timeline{position:relative;margin-left:8px;padding-left:28px;border-left:2px dashed var(--line)}
+.tl{position:relative;margin-bottom:30px}
+.tl::before{content:"";position:absolute;left:-36px;top:6px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:2px solid var(--accent2)}
+.tl.now::before{border-color:var(--accent);background:var(--accent);box-shadow:0 0 14px var(--accent)}
+.tl .when{font:12.5px var(--mono);color:var(--muted)}
+.tl h3{font-family:var(--display);font-size:1.25rem;margin:2px 0 4px;letter-spacing:-.01em}
+.tl h3 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:.95rem}
+.tl ul{margin:6px 0 0;padding-left:18px;color:var(--muted)}
+.tl li{margin:3px 0}
+.tl li b{color:var(--fg);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font:12px var(--mono);border:1px solid var(--line);border-radius:6px;padding:2px 8px;color:var(--muted);background:var(--panel)}
+
+/* projects */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.filters button{font:13px var(--mono);background:var(--panel);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
+.filters button[aria-pressed="true"]{color:var(--bg);background:var(--fg);border-color:var(--fg)}
+.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media (max-width:860px){.projects{grid-template-columns:1fr}}
+.card{position:relative;border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:22px;display:flex;flex-direction:column;gap:12px;transition:transform .2s,border-color .2s;overflow:hidden;min-width:0}
+.card::after{content:"";position:absolute;inset:0;border-radius:16px;pointer-events:none;background:radial-gradient(400px circle at var(--mx,50%) var(--my,0%),var(--glow),transparent 45%);opacity:0;transition:opacity .25s}
+.card:hover{border-color:color-mix(in srgb,var(--accent) 55%,var(--line));transform:translateY(-3px)}
+.card:hover::after{opacity:1}
+.card.wide{grid-column:1/-1}
+.card-top{display:flex;justify-content:space-between;gap:10px;align-items:center;font:12px var(--mono);color:var(--muted)}
+.badge{font:11.5px var(--mono);padding:3px 9px;border-radius:999px;border:1px solid}
+.badge.live{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.badge.wip{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 45%,transparent)}
+.card h3{font-family:var(--display);font-size:1.4rem;line-height:1.2;margin:0;letter-spacing:-.015em;text-wrap:balance}
+.card p{margin:0;color:var(--muted)}
+.card ul{margin:0;padding-left:18px;color:var(--muted)}
+.card li{margin:3px 0}
+.card li b{color:var(--fg);font-weight:600}
+.metrics{display:flex;flex-wrap:wrap;gap:10px}
+.metric{border:1px dashed var(--line);border-radius:10px;padding:8px 12px;min-width:92px}
+.metric b{display:block;font-family:var(--display);font-size:1.35rem;font-weight:800;font-variant-numeric:tabular-nums}
+.metric span{font:11.5px var(--mono);color:var(--muted)}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:4px}
+.links a{font:13px var(--mono);text-decoration:none;color:var(--accent2);border-bottom:1px dashed currentColor}
+.diagram{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--bg2);padding:12px}
+.diagram svg{display:block;min-width:620px;width:100%;height:auto}
+.diagram text{font-family:var(--mono);font-size:12px;fill:var(--fg)}
+.diagram .sm{font-size:10.5px;fill:var(--muted)}
+.diagram rect{fill:var(--panel);stroke:var(--line)}
+.diagram rect.hl{stroke:var(--accent);fill:color-mix(in srgb,var(--accent) 10%,var(--panel))}
+.diagram path{stroke:var(--accent2);fill:none;stroke-width:1.6;stroke-dasharray:5 5;animation:flow 1.2s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-20}}
+.card[hidden]{display:none}
+
+/* skills */
+.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:900px){.skills{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.skills{grid-template-columns:1fr}}
+.skill{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--panel)}
+.skill h3{font:600 13px var(--mono);color:var(--accent);margin:0 0 10px;letter-spacing:.04em}
+.skill .chips{margin:0}
+
+/* contact */
+.contact{border:1px solid var(--line);border-radius:20px;padding:40px 28px;background:radial-gradient(600px circle at 0% 0%,var(--glow),transparent 60%),var(--panel);text-align:left}
+.contact h2{margin-top:0}
+.contact-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.copy{cursor:pointer}
+footer{padding-block:30px 50px;color:var(--muted);font:12.5px var(--mono);text-align:center}
+
+/* reveal: visible at rest; JS only adds motion */
+.reveal{transition:transform .7s cubic-bezier(.2,.7,.2,1),opacity .7s}
+.js .reveal.pre{transform:translateY(22px);opacity:.001}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .js .reveal.pre{transform:none;opacity:1}
+}
+</style>
+</head>
+<body>
+<div class="grid-bg" aria-hidden="true"></div>
+<div class="glow" id="glow" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top"><span class="dot"></span>smitha.soman</a>
+    <div class="navlinks" id="navlinks">
+      <a href="#projects">projects</a><a href="#experience">experience</a><a href="#about">about</a><a href="#skills">skills</a><a href="#contact">contact</a>
+    </div>
+    <button class="menu" id="menu" aria-expanded="false" aria-controls="navlinks">menu</button>
+    <button class="theme" id="theme" aria-label="Toggle light and dark theme">◐</button>
+  </div>
+</nav>
+
+<header class="hero wrap" id="top">
+  <div class="hero-grid">
+    <div class="reveal">
+      <span class="status"><i></i>Open to Summer 2027 internships · SF Bay Area</span>
+      <h1>From engine control units to <span class="grad">neural networks.</span></h1>
+      <p class="lede">I'm <b>Smitha Soman</b>, an embedded software engineer turned ML engineer. I shipped real-time C on automotive controllers at <b>Bosch</b> and <b>Navistar</b>, and I'm now completing an <b>M.S. in Artificial Intelligence at San José State</b>, focused on ML that runs reliably on real, resource-limited hardware.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#projects">View projects →</a>
+        <a class="btn" href="resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+        <a class="btn" href="https://github.com/SmithaSJSU" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://www.linkedin.com/in/somansmitha" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+    <div class="scope reveal" aria-label="Animation of a sensor signal resolving into a neural network">
+      <canvas id="scope"></canvas>
+      <div class="hud"><span>CH1 <b>CAN_RX</b></span><span id="hudmode">mode: <b>signal</b></span></div>
+      <div class="cap">signal → features → inference</div>
+    </div>
+  </div>
+  <div class="stats reveal">
+    <div class="stat"><b data-count="3.5" data-dec="1">0</b><span>years production embedded C</span></div>
+    <div class="stat"><b data-count="3">0</b><span>OEM programs: Daimler, Chrysler, Toyota</span></div>
+    <div class="stat"><b data-count="72">0</b><span>automated tests across my projects</span></div>
+    <div class="stat"><b data-count="2027">0</b><span>M.S. AI graduation (Dec)</span></div>
+  </div>
+</header>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">// 01 · projects</div>
+      <h2>Things I've built and am building.</h2>
+      <p class="sub">Every project here is real; work in progress is labeled as such. Results get added as experiments finish.</p>
+    </div>
+    <div class="filters reveal" role="group" aria-label="Filter projects">
+      <button type="button" data-f="all" aria-pressed="true">all</button>
+      <button type="button" data-f="ml" aria-pressed="false">ml</button>
+      <button type="button" data-f="edge" aria-pressed="false">edge / efficiency</button>
+      <button type="button" data-f="llm" aria-pressed="false">llm</button>
+      <button type="button" data-f="data" aria-pressed="false">data</button>
+    </div>
+
+    <div class="projects">
+      <article class="card wide reveal" data-tags="ml edge">
+        <div class="card-top"><span>CMPE 252 · fall 2026 · team of 2</span><span class="badge wip">in progress</span></div>
+        <h3>Does near-lossless quantization hold up when the scene changes?</h3>
+        <p>Quantizing the vision encoder of π0, a 3.3B-parameter vision-language-action robot policy, to 4 bits costs only 1.5 points of task success on clean LIBERO benchmarks. We test whether that gap grows when lighting, backgrounds, and object layouts change, using matched closed-loop simulation episodes and a difference-in-differences metric we call the Quantization Robustness Penalty (QRP).</p>
+        <div class="diagram" aria-label="Study design diagram">
+          <svg viewBox="0 0 860 120" role="img" aria-label="Released pi0 checkpoint, precision settings, clean and shifted conditions, matched rollouts, QRP, clustered bootstrap interval">
+            <rect x="4" y="34" width="110" height="52" rx="8"/><text x="59" y="58" text-anchor="middle">π0 policy</text><text class="sm" x="59" y="74" text-anchor="middle">3.3B · BF16</text>
+            <rect x="148" y="34" width="120" height="52" rx="8"/><text x="208" y="58" text-anchor="middle">precision</text><text class="sm" x="208" y="74" text-anchor="middle">4 RTN settings</text>
+            <rect x="302" y="34" width="120" height="52" rx="8"/><text x="362" y="58" text-anchor="middle">conditions</text><text class="sm" x="362" y="74" text-anchor="middle">clean + 3 shifts</text>
+            <rect x="456" y="34" width="110" height="52" rx="8"/><text x="511" y="58" text-anchor="middle">rollouts</text><text class="sm" x="511" y="74" text-anchor="middle">matched episodes</text>
+            <rect class="hl" x="600" y="34" width="130" height="52" rx="8"/><text x="665" y="58" text-anchor="middle">QRP</text><text class="sm" x="665" y="74" text-anchor="middle">Δshift − Δclean</text>
+            <rect x="764" y="34" width="92" height="52" rx="8"/><text x="810" y="58" text-anchor="middle">95% CI</text><text class="sm" x="810" y="74" text-anchor="middle">clustered</text>
+            <path d="M114 60H148"/><path d="M268 60H302"/><path d="M422 60H456"/><path d="M566 60H600"/><path d="M730 60H764"/>
+            <text class="sm" x="665" y="112" text-anchor="middle">QRP &gt; 0: quantization hurts more under shift</text>
+          </svg>
+        </div>
+        <ul>
+          <li>I own the <b>LIBERO-Plus integration</b>: a benchmark runner that samples perturbed task variants by shift type and difficulty, rebuilds the clean tasks the suite leaves out, maps each variant back to its base initial states, and gives the policy the original instruction to avoid a known prompt leak.</li>
+          <li>I run the <b>visual-shift experiments</b> (lighting, background, layout; about 3,000 episodes) and compute the <b>primary result</b>: pooled QRP with a paired, task-clustered bootstrap interval, judged by a decision rule fixed before any core run.</li>
+          <li>Set up the team's <b>GPU infrastructure</b> on Google Cloud and the repo workflow: one pinned environment for every core run, cross-review before merge, and a design freeze after the pilot.</li>
+        </ul>
+        <div class="metrics">
+          <div class="metric"><b>6,300</b><span>core episodes (planned)</span></div>
+          <div class="metric"><b>4</b><span>precision settings</span></div>
+          <div class="metric"><b>3</b><span>visual shifts</span></div>
+          <div class="metric"><b>~35</b><span>GPU-hours (budget)</span></div>
+        </div>
+        <div class="chips"><span class="chip">π0 / LeRobot</span><span class="chip">LIBERO-Plus</span><span class="chip">MuJoCo</span><span class="chip">post-training quantization</span><span class="chip">bootstrap CI</span><span class="chip">Google Cloud</span></div>
+      </article>
+      <article class="card reveal" data-tags="ml edge">
+        <div class="card-top"><span>CMPE 258 · fall 2026 · team of 3</span><span class="badge wip">in progress</span></div>
+        <h3>What breaks modern audio deepfake detectors?</h3>
+        <p>A controlled study on ASVspoof 5 and DFADD: which shift hurts most &mdash; unseen generators, codecs, or adversarial post-processing &mdash; and do SSL detectors fail differently from AASIST?</p>
+        <ul>
+          <li>I own the <b>evaluation harness</b>: protocol parsing, shift slices with utterance-level codec and adversarial pairing, speaker-level bootstrap intervals, and every results table and figure in the report.</li>
+          <li>It already <b>reproduces the official ASVspoof 5 AASIST metrics</b> &mdash; 15.20% dev EER against the 15.2% published &mdash; which is what licenses every comparison built on top of it.</li>
+          <li>I run the <b>falsification controls</b> (random scores, 8&nbsp;kHz downsampling, VAD-trimmed reruns) that stop a &ldquo;codec effect&rdquo; from turning out to be a pipeline artifact, and the <b>DFADD cross-dataset evaluation</b> against recent diffusion and flow-matching TTS.</li>
+          <li>Demo application, plus <b>INT8 quantization</b> and CPU latency per shift if the core results table lands on schedule.</li>
+        </ul>
+        <div class="metrics">
+          <div class="metric"><b>15.20%</b><span>dev EER, matches official</span></div>
+          <div class="metric"><b>681K</b><span>eval utterances</span></div>
+          <div class="metric"><b>3</b><span>shift types decomposed</span></div>
+          <div class="metric"><b>2</b><span>detectors compared</span></div>
+        </div>
+        <div class="chips"><span class="chip">ASVspoof 5</span><span class="chip">AASIST</span><span class="chip">XLS-R</span><span class="chip">EER · minDCF</span><span class="chip">bootstrap CI</span></div>
+      </article>
+      <article class="card reveal" data-tags="ml edge">
+        <div class="card-top"><span>CMPE 257 · fall 2026 · team of 3</span><span class="badge wip">in progress</span></div>
+        <h3>Uncertainty for TinyML in a single forward pass</h3>
+        <p>Re-implementing QUTE (ICML 2025) from the paper alone, with no reference code: two lightweight output heads on one CNN, trained by copying early-exit weights into them before every batch, so confidence falls when accuracy does without a second forward pass.</p>
+        <ul>
+          <li>I own the <b>model and the shared interface</b>: the base CNN and prediction contract the rest of the team builds against, then the early-exit branches, output blocks, weight-transfer training loop, and the ablation that removes it.</li>
+          <li>Comparing against softmax confidence, MC Dropout, and deep ensembles on calibration, label-free accuracy-drop detection across 15 corruptions, and parameter cost.</li>
+        </ul>
+        <div class="chips"><span class="chip">PyTorch</span><span class="chip">MNIST-C</span><span class="chip">ECE · NLL · AUPRC</span></div>
+      </article>
+      <article class="card wide reveal" data-tags="llm data">
+        <div class="card-top"><span>independent · summer 2026</span><span class="badge live">shipped</span></div>
+        <h3>Text-to-SQL Pipeline that never trusts the model</h3>
+        <p>Turns plain-English questions into SQL that is safe to run. Every generated query is parsed into a syntax tree and checked against an allow-list and the live schema before it can touch the database.</p>
+        <div class="diagram" aria-label="Pipeline diagram">
+          <svg viewBox="0 0 860 120" role="img" aria-label="Question, schema introspection, prompt builder, LLM, AST validator, executor">
+            <rect x="4" y="34" width="110" height="52" rx="8"/><text x="59" y="58" text-anchor="middle">question</text><text class="sm" x="59" y="74" text-anchor="middle">natural language</text>
+            <rect x="148" y="34" width="120" height="52" rx="8"/><text x="208" y="58" text-anchor="middle">introspect</text><text class="sm" x="208" y="74" text-anchor="middle">tables · PK/FK</text>
+            <rect x="302" y="34" width="120" height="52" rx="8"/><text x="362" y="58" text-anchor="middle">prompt</text><text class="sm" x="362" y="74" text-anchor="middle">schema injected</text>
+            <rect x="456" y="34" width="110" height="52" rx="8"/><text x="511" y="58" text-anchor="middle">LLM</text><text class="sm" x="511" y="74" text-anchor="middle">Claude / GPT</text>
+            <rect class="hl" x="600" y="34" width="130" height="52" rx="8"/><text x="665" y="58" text-anchor="middle">AST validator</text><text class="sm" x="665" y="74" text-anchor="middle">SELECT-only</text>
+            <rect x="764" y="34" width="92" height="52" rx="8"/><text x="810" y="58" text-anchor="middle">execute</text><text class="sm" x="810" y="74" text-anchor="middle">read-only</text>
+            <path d="M114 60H148"/><path d="M268 60H302"/><path d="M422 60H456"/><path d="M566 60H600"/><path d="M730 60H764"/>
+            <text class="sm" x="665" y="112" text-anchor="middle">blocks DROP · stacked statements · unknown tables</text>
+          </svg>
+        </div>
+        <div class="metrics">
+          <div class="metric"><b>29</b><span>pytest tests</span></div>
+          <div class="metric"><b>0</b><span>API keys to run CI</span></div>
+          <div class="metric"><b>2</b><span>LLM backends</span></div>
+        </div>
+        <div class="chips"><span class="chip">Python</span><span class="chip">LangChain</span><span class="chip">SQLAlchemy</span><span class="chip">sqlglot</span><span class="chip">pytest</span></div>
+        <div class="links"><a href="https://github.com/SmithaSJSU/Text-to-SQL-Tool-LLM-Agent-Pipeline" target="_blank" rel="noopener">github repo ↗</a></div>
+      </article>
+      <article class="card reveal" data-tags="data">
+        <div class="card-top"><span>CMPE 180B · spring 2026 · team of 4</span><span class="badge live">shipped</span></div>
+        <h3>JASS Tour Management System</h3>
+        <p>A logistics platform for touring artists to plan routes, book venues, and manage finances. I led the Tickets &amp; Logistics module and added an ML extension for ticket sell-through prediction.</p>
+        <div class="metrics">
+          <div class="metric"><b>20</b><span>normalized tables</span></div>
+          <div class="metric"><b>~48K</b><span>rows</span></div>
+          <div class="metric"><b>32</b><span>indexes</span></div>
+          <div class="metric"><b>30</b><span>validation tests</span></div>
+        </div>
+        <div class="chips"><span class="chip">PostgreSQL</span><span class="chip">PostGIS</span><span class="chip">EXPLAIN ANALYZE</span><span class="chip">scikit-learn</span></div>
+        <div class="links"><a href="https://github.com/SmithaSJSU/jass-tour-management" target="_blank" rel="noopener">github repo ↗</a></div>
+      </article>
+      <article class="card reveal" data-tags="data">
+        <div class="card-top"><span>research explainer · 2026</span><span class="badge live">live</span></div>
+        <h3>Who can search where your car has been?</h3>
+        <p>An illustrated explainer on how automated license plate readers turn ordinary travel into searchable records, how that access has been misused, and what accountability exists. Research written for a general audience.</p>
+        <div class="chips"><span class="chip">research</span><span class="chip">privacy</span><span class="chip">technical writing</span></div>
+        <div class="links"><a href="https://smithasjsu.github.io/alpr-explainer/" target="_blank" rel="noopener">open the explainer ↗</a></div>
+      </article>
+
+
+
+
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">// 02 · experience</div>
+      <h2>Engineering experience.</h2>
+      <p class="sub">Production embedded software on automotive controllers, before my M.S. in AI.</p>
+    </div>
+    <div class="timeline">
+      <div class="tl reveal">
+        <div class="when">Aug 2010 – Oct 2012</div>
+        <h3>Senior Product Development Engineer <small>· Navistar, Lisle IL</small></h3>
+        <ul>
+          <li>Embedded software for the <b>Electronic System Controller</b>, the body-control computer on commercial trucks; built Driver Information Display features with CANoe and CAPL.</li>
+          <li>Debugged and customized <b>kernel-level C</b> in the real-time OS to cut control-loop latency.</li>
+        </ul>
+        <div class="chips"><span class="chip">C</span><span class="chip">RTOS</span><span class="chip">CANoe</span><span class="chip">CAPL</span></div>
+      </div>
+      <div class="tl reveal">
+        <div class="when">Aug 2008 – Nov 2009</div>
+        <h3>Software Engineer <small>· Robert Bosch Engineering &amp; Business Solutions</small></h3>
+        <ul>
+          <li>Embedded C for <b>diesel engine control units</b> (cruise control, longitudinal limiter, communication) for <b>Daimler, Chrysler, and Toyota</b> programs, from requirements through ECU integration.</li>
+          <li>CAN dashboard display, freeze-frame diagnostics, and stall detection for Mercedes A-Class engine management.</li>
+        </ul>
+        <div class="chips"><span class="chip">Embedded C</span><span class="chip">CAN</span><span class="chip">CANalyzer</span><span class="chip">diagnostics</span></div>
+      </div>
+      <div class="tl now reveal">
+        <div class="when">Since then</div>
+        <h3>Leadership &amp; now, AI <small>· 2012 – present</small></h3>
+        <ul>
+          <li><b>M.S. Artificial Intelligence</b>, San José State University, Jan 2026 – Dec 2027 (expected): evaluation and efficiency work on quantized robot policies, audio deepfake detectors, and TinyML uncertainty.</li>
+          <li><b>Program Manager</b>, PlayCV (2022–2025): ran operations across 5 sites and 90+ staff.</li>
+          <li><b>Founder</b>, independent arts education studio (2012–2022).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about-grid">
+    <div class="reveal">
+      <div class="eyebrow">// 03 · about</div>
+      <h2>Hardware discipline, ML curiosity.</h2>
+      <p>My first job was writing C for diesel engine control units, where code has to meet timing deadlines and every fault has to be caught and logged. That taught me to treat software as something that must work on real hardware, every time.</p>
+      <p>Today I bring that mindset to machine learning: evaluating models under distribution shift, estimating uncertainty cheaply enough for tiny devices, testing whether quantized robot policies hold up under visual shift, and treating LLM output as untrusted input.</p>
+      <p>Between those chapters I founded and ran an arts education studio and led operations for a nonprofit across five sites and 90+ staff, so I also know how to plan, communicate, and get a team across the finish line.</p>
+    </div>
+    <div class="term reveal" aria-label="Terminal summary">
+      <div class="term-bar"><i></i><i></i><i></i><span>~/smitha — zsh</span></div>
+      <pre id="termout" aria-live="off"></pre>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">// 04 · stack</div>
+      <h2>Tools I reach for.</h2>
+    </div>
+    <div class="skills">
+      <div class="skill reveal"><h3>EMBEDDED</h3><div class="chips"><span class="chip">Embedded C</span><span class="chip">ECU software</span><span class="chip">RTOS</span><span class="chip">CAN</span><span class="chip">CANoe / CAPL</span><span class="chip">CANalyzer</span><span class="chip">diagnostics</span></div></div>
+      <div class="skill reveal"><h3>ML / AI</h3><div class="chips"><span class="chip">PyTorch</span><span class="chip">scikit-learn</span><span class="chip">quantization</span><span class="chip">calibration</span><span class="chip">model evaluation</span><span class="chip">LangChain</span><span class="chip">OpenAI &amp; Anthropic APIs</span></div></div>
+      <div class="skill reveal"><h3>LANGUAGES</h3><div class="chips"><span class="chip">Python</span><span class="chip">C</span><span class="chip">C++</span><span class="chip">SQL</span><span class="chip">Shell</span></div></div>
+      <div class="skill reveal"><h3>DATA &amp; TOOLING</h3><div class="chips"><span class="chip">PostgreSQL</span><span class="chip">PostGIS</span><span class="chip">SQLAlchemy</span><span class="chip">pandas</span><span class="chip">Git</span><span class="chip">pytest</span><span class="chip">Jupyter</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact reveal">
+      <div class="eyebrow">// 05 · contact</div>
+      <h2>Looking for a Summer 2027 intern who can go from datasheet to dataset?</h2>
+      <p class="sub" style="margin-bottom:0">I'm interested in edge and embedded ML, ML systems, and firmware roles in the Bay Area. I'm happy to talk.</p>
+      <div class="contact-row">
+        <button class="btn primary copy" id="copyemail" type="button">smitha.som13@gmail.com <span aria-hidden="true">⧉</span></button>
+        <a class="btn" href="https://www.linkedin.com/in/somansmitha" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="btn" href="https://github.com/SmithaSJSU" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="btn" href="resume.pdf" target="_blank" rel="noopener">Resume (PDF) ↗</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>© <span id="yr">2026</span> Smitha Soman · built by hand, hosted on GitHub Pages</footer>
+
+<script>
+document.documentElement.classList.add('js');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* theme toggle (remembered per browser) */
+const themeBtn=document.getElementById('theme');
+try{const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;}catch(e){}
+themeBtn.addEventListener('click',()=>{
+  const cur=document.documentElement.dataset.theme || (matchMedia('(prefers-color-scheme: light)').matches?'light':'dark');
+  const next=cur==='light'?'dark':'light';document.documentElement.dataset.theme=next;
+  try{localStorage.setItem('theme',next);}catch(e){}
+});
+document.getElementById('yr').textContent=new Date().getFullYear();
+
+/* mobile menu */
+const menu=document.getElementById('menu'),nl=document.getElementById('navlinks');
+menu.addEventListener('click',()=>{const o=nl.classList.toggle('open');menu.setAttribute('aria-expanded',String(o));menu.textContent=o?'close':'menu';});
+nl.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nl.classList.remove('open');menu.setAttribute('aria-expanded','false');menu.textContent='menu';}));
+
+/* scroll progress + active nav */
+const prog=document.getElementById('progress');
+const links=[...document.querySelectorAll('.navlinks a')];
+const secs=links.map(a=>document.querySelector(a.getAttribute('href')));
+function onScroll(){
+  const h=document.documentElement;prog.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  let idx=-1;secs.forEach((s,i)=>{if(s&&s.getBoundingClientRect().top<140)idx=i});
+  links.forEach((a,i)=>a.classList.toggle('on',i===idx));
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* cursor glow + card spotlight */
+const glow=document.getElementById('glow');
+if(!reduce){addEventListener('pointermove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';});}
+document.querySelectorAll('.card').forEach(c=>c.addEventListener('pointermove',e=>{
+  const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px');
+}));
+
+/* reveal on scroll (content is visible without JS) */
+const revs=[...document.querySelectorAll('.reveal')];
+if(!reduce && 'IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.remove('pre');io.unobserve(en.target);}}),{threshold:.12});
+  revs.forEach(el=>{if(el.getBoundingClientRect().top>innerHeight){el.classList.add('pre');io.observe(el);}});
+}
+
+/* counters */
+function countUp(el){
+  const to=parseFloat(el.dataset.count),dec=+(el.dataset.dec||0);
+  if(reduce){el.textContent=to.toFixed(dec);return;}
+  const t0=performance.now(),dur=1400;
+  (function step(t){const p=Math.min(1,(t-t0)/dur),v=to*(1-Math.pow(1-p,3));el.textContent=(dec?v.toFixed(dec):Math.round(v));if(p<1)requestAnimationFrame(step);})(t0);
+}
+const cio=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){countUp(en.target);cio.unobserve(en.target);}}),{threshold:.5});
+document.querySelectorAll('[data-count]').forEach(el=>{el.textContent=el.dataset.count;cio.observe(el)});
+
+/* terminal typing */
+const lines=[
+  ['p','$ '],['k','whoami\n'],['','smitha — embedded engineer → ML engineer\n\n'],
+  ['p','$ '],['k','cat experience.log\n'],['c','[2008] '],['','bosch    · diesel ECU firmware (C, CAN)\n'],['c','[2010] '],['','navistar · RTOS kernel tuning, truck ESC\n'],['c','[2026] '],['','sjsu     · M.S. AI, edge ML + evaluation\n\n'],
+  ['p','$ '],['k','pytest -q text2sql/\n'],['p','29 passed\n\n'],
+  ['p','$ '],['k','echo $LOOKING_FOR\n'],['','Summer 2027 · edge ML · ML systems · firmware\n']
+];
+const out=document.getElementById('termout');
+function typeTerm(){
+  if(reduce){out.innerHTML=lines.map(([c,t])=>c?`<span class="${c}">${t}</span>`:t).join('')+'<span class="cursor"></span>';return;}
+  let i=0,j=0,span=null;
+  (function tick(){
+    if(i>=lines.length){out.insertAdjacentHTML('beforeend','<span class="cursor"></span>');return;}
+    const [cls,txt]=lines[i];
+    if(j===0){span=document.createElement('span');if(cls)span.className=cls;out.appendChild(span);}
+    span.textContent+=txt[j++];
+    if(j>=txt.length){i++;j=0;}
+    setTimeout(tick, cls==='k'?38:(txt[j-1]==='\n'?120:8));
+  })();
+}
+const tio=new IntersectionObserver(es=>{if(es[0].isIntersecting){typeTerm();tio.disconnect();}},{threshold:.4});tio.observe(out);
+
+/* project filters */
+const fbtns=[...document.querySelectorAll('.filters button')];
+fbtns.forEach(b=>b.addEventListener('click',()=>{
+  fbtns.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  const f=b.dataset.f;document.querySelectorAll('.card').forEach(c=>{c.hidden=!(f==='all'||c.dataset.tags.split(' ').includes(f));c.classList.remove('pre');});
+}));
+
+/* copy email */
+const ce=document.getElementById('copyemail');
+ce.addEventListener('click',async()=>{
+  const email='smitha.som13@gmail.com';
+  try{await navigator.clipboard.writeText(email);ce.firstChild.textContent='Copied! ';setTimeout(()=>ce.firstChild.textContent=email+' ',1600);}
+  catch(e){location.href='mailto:'+email;}
+});
+
+/* hero oscilloscope: CAN-like square wave → sine features → neural network */
+const cv=document.getElementById('scope'),ctx=cv.getContext('2d');
+const hud=document.getElementById('hudmode');
+let W,H,dpr;
+function size(){dpr=Math.min(2,devicePixelRatio||1);const r=cv.getBoundingClientRect();W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+size();addEventListener('resize',size);
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const layers=[4,6,6,3];
+function nodes(){const pts=[];layers.forEach((n,li)=>{for(let k=0;k<n;k++){pts.push({l:li,x:W*(0.16+li*0.68/(layers.length-1)),y:H*(0.22+ (k+0.5)*0.6/n)});}});return pts;}
+function draw(t){
+  const A=css('--accent'),B=css('--accent2'),L=css('--line');
+  ctx.clearRect(0,0,W,H);
+  // grid
+  ctx.strokeStyle=L;ctx.globalAlpha=.5;ctx.lineWidth=1;
+  for(let x=0;x<W;x+=W/10){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=H/10){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  ctx.globalAlpha=1;
+  const cyc=(t/1000)%12, phase=cyc<4?0:cyc<8?1:2, k=phase===0?cyc/4:phase===1?(cyc-4)/4:(cyc-8)/4;
+  hud.innerHTML='mode: <b>'+['signal','features','inference'][phase]+'</b>';
+  if(phase<2){
+    const mix=phase===0?0:Math.min(1,k*1.6);
+    ctx.lineWidth=2.2;ctx.strokeStyle=A;ctx.shadowColor=A;ctx.shadowBlur=10;ctx.beginPath();
+    for(let x=0;x<=W;x+=2){
+      const u=x/W*8+t/700;
+      const sq=(Math.floor(u*1.7+Math.sin(u*0.37)*2)%2?-1:1)*0.55;
+      const sn=Math.sin(u*2.1)*0.35+Math.sin(u*5.3)*0.15;
+      const v=sq*(1-mix)+sn*mix;
+      const y=H*0.5+v*H*0.3;
+      x?ctx.lineTo(x,y):ctx.moveTo(x,y);
+    }
+    ctx.stroke();ctx.shadowBlur=0;
+    if(phase===1){ // feature bars
+      const n=16;for(let i=0;i<n;i++){const hgt=(0.2+0.8*Math.abs(Math.sin(i*1.3+t/600)))*H*0.18*k;
+        ctx.fillStyle=B;ctx.globalAlpha=.55;ctx.fillRect(W*0.08+i*(W*0.84/n),H*0.9-hgt,W*0.84/n-4,hgt);}ctx.globalAlpha=1;}
+  } else {
+    const pts=nodes();
+    ctx.lineWidth=1;
+    pts.forEach(a=>pts.forEach(b=>{if(b.l===a.l+1){
+      const act=(Math.sin(t/300+a.y*0.05+b.y*0.03)+1)/2;
+      ctx.strokeStyle=act>0.7?A:L;ctx.globalAlpha=(act>0.7?0.9:0.5)*Math.min(1,k*2);
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}));
+    ctx.globalAlpha=1;
+    pts.forEach(p=>{const on=(Math.sin(t/250+p.y*0.08+p.l)+1)/2>0.5;
+      ctx.beginPath();ctx.arc(p.x,p.y,on?6:4.5,0,7);ctx.fillStyle=on?A:css('--panel');ctx.strokeStyle=on?A:B;ctx.lineWidth=1.5;
+      if(on){ctx.shadowColor=A;ctx.shadowBlur=12;}ctx.fill();ctx.stroke();ctx.shadowBlur=0;});
+    const out=pts.filter(p=>p.l===layers.length-1);const lab=['bona fide','spoof','abstain'];
+    ctx.font='11px "JetBrains Mono", monospace';ctx.fillStyle=css('--muted');
+    out.forEach((p,i)=>ctx.fillText(lab[i],Math.min(p.x+12,W-70),p.y+4));
+  }
+  if(!reduce)requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+</script>
+</body>
+</html>
