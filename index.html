@@ -7,6 +7,14 @@
 <meta name="description" content="Smitha Soman — embedded software engineer (Bosch, Navistar) turned ML engineer. M.S. in Artificial Intelligence at San José State University. Seeking Summer 2027 internships.">
 <meta property="og:title" content="Smitha Soman · ML & Embedded Engineer">
 <meta property="og:description" content="From engine control units to neural networks. M.S. AI @ SJSU, ex-Bosch, ex-Navistar.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://smithasjsu.github.io/">
+<meta property="og:image" content="https://smithasjsu.github.io/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Smitha Soman: from engine control units to neural networks">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://smithasjsu.github.io/og-image.png">
 <meta name="theme-color" content="#070d1a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -200,8 +208,8 @@ footer{padding-block:30px 50px;color:var(--muted);font:12.5px var(--mono);text-a
       <h1>From engine control units to <span class="grad">neural networks.</span></h1>
       <p class="lede">I'm <b>Smitha Soman</b>, an embedded software engineer turned ML engineer. I shipped real-time C on automotive controllers at <b>Bosch</b> and <b>Navistar</b>, and I'm now completing an <b>M.S. in Artificial Intelligence at San José State</b>, focused on ML that runs reliably on real, resource-limited hardware.</p>
       <div class="ctas">
-        <a class="btn primary" href="#projects">View projects →</a>
-        <a class="btn" href="Smitha_Soman_Resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+        <a class="btn primary" href="Smitha_Soman_Resume.pdf" target="_blank" rel="noopener">Resume (PDF) ↓</a>
+        <a class="btn" href="#projects">View projects →</a>
         <a class="btn" href="https://github.com/SmithaSJSU" target="_blank" rel="noopener">GitHub</a>
         <a class="btn" href="https://www.linkedin.com/in/somansmitha" target="_blank" rel="noopener">LinkedIn</a>
       </div>
@@ -213,10 +221,10 @@ footer{padding-block:30px 50px;color:var(--muted);font:12.5px var(--mono);text-a
     </div>
   </div>
   <div class="stats reveal">
-    <div class="stat"><b data-count="3.5" data-dec="1">0</b><span>years production embedded C</span></div>
-    <div class="stat"><b data-count="3">0</b><span>OEM programs: Daimler, Chrysler, Toyota</span></div>
-    <div class="stat"><b data-count="72">0</b><span>automated tests across my projects</span></div>
-    <div class="stat"><b data-count="2027">0</b><span>M.S. AI graduation (Dec)</span></div>
+    <div class="stat"><b data-count="3.5" data-dec="1">3.5</b><span>years production embedded C</span></div>
+    <div class="stat"><b data-count="3">3</b><span>OEM programs: Daimler, Chrysler, Toyota</span></div>
+    <div class="stat"><b data-count="72">72</b><span>automated tests across my projects</span></div>
+    <div class="stat"><b data-count="2027">2027</b><span>M.S. AI graduation (Dec)</span></div>
   </div>
 </header>
 
@@ -422,7 +430,8 @@ footer{padding-block:30px 50px;color:var(--muted);font:12.5px var(--mono);text-a
       <h2>Looking for a Summer 2027 intern who can go from datasheet to dataset?</h2>
       <p class="sub" style="margin-bottom:0">I'm interested in edge and embedded ML, ML systems, and firmware roles in the Bay Area. I'm happy to talk.</p>
       <div class="contact-row">
-        <button class="btn primary copy" id="copyemail" type="button">smitha.som13@gmail.com <span aria-hidden="true">⧉</span></button>
+        <a class="btn primary" href="mailto:smitha.som13@gmail.com">Email me · smitha.som13@gmail.com</a>
+        <button class="btn copy" id="copyemail" type="button" aria-label="Copy email address">Copy email ⧉</button>
         <a class="btn" href="https://www.linkedin.com/in/somansmitha" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a class="btn" href="https://github.com/SmithaSJSU" target="_blank" rel="noopener">GitHub ↗</a>
         <a class="btn" href="Smitha_Soman_Resume.pdf" target="_blank" rel="noopener">Resume (PDF) ↗</a>
@@ -520,8 +529,8 @@ fbtns.forEach(b=>b.addEventListener('click',()=>{
 const ce=document.getElementById('copyemail');
 ce.addEventListener('click',async()=>{
   const email='smitha.som13@gmail.com';
-  try{await navigator.clipboard.writeText(email);ce.firstChild.textContent='Copied! ';setTimeout(()=>ce.firstChild.textContent=email+' ',1600);}
-  catch(e){location.href='mailto:'+email;}
+  try{await navigator.clipboard.writeText(email);ce.textContent='Copied!';setTimeout(()=>ce.textContent='Copy email ⧉',1600);}
+  catch(e){ce.textContent=email;}
 });
 
 /* hero oscilloscope: CAN-like square wave → sine features → neural network */
@@ -532,7 +541,7 @@ function size(){dpr=Math.min(2,devicePixelRatio||1);const r=cv.getBoundingClient
 size();addEventListener('resize',size);
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const layers=[4,6,6,3];
-function nodes(){const pts=[];layers.forEach((n,li)=>{for(let k=0;k<n;k++){pts.push({l:li,x:W*(0.16+li*0.68/(layers.length-1)),y:H*(0.22+ (k+0.5)*0.6/n)});}});return pts;}
+function nodes(){const pts=[];layers.forEach((n,li)=>{for(let k=0;k<n;k++){pts.push({l:li,x:W*(0.12+li*0.58/(layers.length-1)),y:H*(0.22+ (k+0.5)*0.6/n)});}});return pts;}
 function draw(t){
   const A=css('--accent'),B=css('--accent2'),L=css('--line');
   ctx.clearRect(0,0,W,H);
@@ -571,7 +580,7 @@ function draw(t){
       if(on){ctx.shadowColor=A;ctx.shadowBlur=12;}ctx.fill();ctx.stroke();ctx.shadowBlur=0;});
     const out=pts.filter(p=>p.l===layers.length-1);const lab=['bona fide','spoof','abstain'];
     ctx.font='11px "JetBrains Mono", monospace';ctx.fillStyle=css('--muted');
-    out.forEach((p,i)=>ctx.fillText(lab[i],Math.min(p.x+12,W-70),p.y+4));
+    out.forEach((p,i)=>ctx.fillText(lab[i],p.x+14,p.y+4));
   }
   if(!reduce)requestAnimationFrame(draw);
 }
