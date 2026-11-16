@@ -245,9 +245,9 @@ footer{padding-block:30px 50px;color:var(--muted);font:12.5px var(--mono);text-a
 
     <div class="projects">
       <article class="card wide reveal" data-tags="ml edge">
-        <div class="card-top"><span>CMPE 252 · fall 2026 · team of 2</span><span class="badge wip">in progress</span></div>
+        <div class="card-top"><span>CMPE 252 · fall 2026 · team of 2</span><span class="badge wip">results in · writing up</span></div>
         <h3>Does near-lossless quantization hold up when the scene changes?</h3>
-        <p>Quantizing the vision encoder of π0, a 3.3B-parameter vision-language-action robot policy, to 4 bits costs only 1.5 points of task success on clean LIBERO benchmarks. We test whether that gap grows when lighting, backgrounds, and object layouts change, using matched closed-loop simulation episodes and a difference-in-differences metric we call the Quantization Robustness Penalty (QRP).</p>
+        <p>Quantizing the vision encoder of π0, a 3.3B-parameter vision-language-action robot policy, to 4 bits costs only 1.5 points of task success on clean LIBERO benchmarks. We tested whether that gap grows when lighting, backgrounds, and object layouts change, using matched closed-loop simulation episodes and a difference-in-differences metric we call the Quantization Robustness Penalty (QRP). <b>It doesn't, as far as we can measure:</b> the pooled penalty is +0.9 points with a 95% interval of &minus;1.4 to +3.2, which by the decision rule we fixed in advance reads as no practically important penalty.</p>
         <div class="diagram" aria-label="Study design diagram">
           <svg viewBox="0 0 860 120" role="img" aria-label="Released pi0 checkpoint, precision settings, clean and shifted conditions, matched rollouts, QRP, clustered bootstrap interval">
             <rect x="4" y="34" width="110" height="52" rx="8"/><text x="59" y="58" text-anchor="middle">π0 policy</text><text class="sm" x="59" y="74" text-anchor="middle">3.3B · BF16</text>
@@ -262,44 +262,56 @@ footer{padding-block:30px 50px;color:var(--muted);font:12.5px var(--mono);text-a
         </div>
         <ul>
           <li>I own the <b>LIBERO-Plus integration</b>: a benchmark runner that samples perturbed task variants by shift type and difficulty, rebuilds the clean tasks the suite leaves out, maps each variant back to its base initial states, and gives the policy the original instruction to avoid a known prompt leak.</li>
-          <li>I run the <b>visual-shift experiments</b> (lighting, background, layout; about 3,000 episodes) and compute the <b>primary result</b>: pooled QRP with a paired, task-clustered bootstrap interval, judged by a decision rule fixed before any core run.</li>
-          <li>Set up the team's <b>GPU infrastructure</b> on Google Cloud and the repo workflow: one pinned environment for every core run, cross-review before merge, and a design freeze after the pilot.</li>
+          <li>I ran the <b>lighting and background grids</b> (2,040 episodes across four precision settings) after we froze the design, and reproduced the published full-precision baseline first (76.0% against 78.0%) to check the harness.</li>
+          <li>My teammate ran the primary analysis, and I <b>reproduced it independently</b> from the same commit without seeing her output. Every number matched. Whole-model 4-bit quantization is less clear-cut: +2.6 points, interval &minus;1.1 to +6.1, which we report as inconclusive.</li>
+          <li>Set up the team's <b>GPU infrastructure</b> on Google Cloud and the repo workflow: one pinned environment for every core run, cross-review before merge, and a design freeze before any core data. Blinded failure coding and the report are what's left.</li>
         </ul>
         <div class="metrics">
-          <div class="metric"><b>6,300</b><span>core episodes (planned)</span></div>
+          <div class="metric"><b>+0.9 pp</b><span>pooled penalty [&minus;1.4, +3.2]</span></div>
+          <div class="metric"><b>5,460</b><span>core episodes run</span></div>
           <div class="metric"><b>4</b><span>precision settings</span></div>
           <div class="metric"><b>3</b><span>visual shifts</span></div>
-          <div class="metric"><b>~35</b><span>GPU-hours (budget)</span></div>
         </div>
         <div class="chips"><span class="chip">π0 / LeRobot</span><span class="chip">LIBERO-Plus</span><span class="chip">MuJoCo</span><span class="chip">post-training quantization</span><span class="chip">bootstrap CI</span><span class="chip">Google Cloud</span></div>
+        <div class="links"><a href="https://github.com/cmpe252-quantvla-sjsu/pi0-quant-robustness" target="_blank" rel="noopener">github repo ↗</a></div>
       </article>
       <article class="card reveal" data-tags="ml edge">
-        <div class="card-top"><span>CMPE 258 · fall 2026 · team of 3</span><span class="badge wip">in progress</span></div>
+        <div class="card-top"><span>CMPE 258 · fall 2026 · team of 3</span><span class="badge wip">core results in</span></div>
         <h3>What breaks modern audio deepfake detectors?</h3>
-        <p>A controlled study on ASVspoof 5 and DFADD: which shift hurts most &mdash; unseen generators, codecs, or adversarial post-processing &mdash; and do SSL detectors fail differently from AASIST?</p>
+        <p>A controlled study on ASVspoof 5 and DFADD: which shifts hurt, and do SSL detectors fail differently from AASIST? So far the answer is yes. The two detectors break in opposite places: adversarial filtering costs AASIST 43 EER points and XLS-R only 2, while a neural codec costs XLS-R 16 points and AASIST 7.</p>
         <ul>
           <li>I own the <b>evaluation harness</b>: protocol parsing, shift slices with utterance-level codec and adversarial pairing, speaker-level bootstrap intervals, and every results table and figure in the report.</li>
-          <li>It already <b>reproduces the official ASVspoof 5 AASIST metrics</b> &mdash; 15.20% dev EER against the 15.2% published &mdash; which is what licenses every comparison built on top of it.</li>
-          <li>I run the <b>falsification controls</b> (random scores, 8&nbsp;kHz downsampling, VAD-trimmed reruns) that stop a &ldquo;codec effect&rdquo; from turning out to be a pipeline artifact, and the <b>DFADD cross-dataset evaluation</b> against recent diffusion and flow-matching TTS.</li>
-          <li>Demo application, plus <b>INT8 quantization</b> and CPU latency per shift if the core results table lands on schedule.</li>
+          <li>It <b>reproduces the official ASVspoof 5 AASIST metrics</b> (15.20% dev EER against the 15.2% published, and 28.11% on pooled eval both ways), which is what lets us trust every comparison built on top of it.</li>
+          <li>Pairing each coded file with its own uncoded original showed that <b>codecs mostly hurt real speech</b>: bona fide scores drop under every codec for both detectors, while spoof scores barely move.</li>
+          <li>My <b>silence-trimming control</b> turned up a confound: the VAD cut about 200&nbsp;ms more from 8&nbsp;kHz files, which made the codec effect look like it changed. On boundary-matched utterances it doesn't, so the codec effect is not a silence shortcut.</li>
+          <li>Next: folding DFADD into the main table, the random-score control, and INT8 quantization with CPU latency if time allows.</li>
         </ul>
         <div class="metrics">
           <div class="metric"><b>15.20%</b><span>dev EER, matches official</span></div>
           <div class="metric"><b>681K</b><span>eval utterances</span></div>
-          <div class="metric"><b>3</b><span>shift types decomposed</span></div>
-          <div class="metric"><b>2</b><span>detectors compared</span></div>
+          <div class="metric"><b>+43.3</b><span>EER pts, AASIST adversarial</span></div>
+          <div class="metric"><b>+16.5</b><span>EER pts, XLS-R neural codec</span></div>
         </div>
         <div class="chips"><span class="chip">ASVspoof 5</span><span class="chip">AASIST</span><span class="chip">XLS-R</span><span class="chip">EER · minDCF</span><span class="chip">bootstrap CI</span></div>
+        <div class="links"><a href="https://github.com/cmpe258-deepfake-detection-sjsu/Deepfake_audio_detection" target="_blank" rel="noopener">github repo ↗</a></div>
       </article>
       <article class="card reveal" data-tags="ml edge">
-        <div class="card-top"><span>CMPE 257 · fall 2026 · team of 3</span><span class="badge wip">in progress</span></div>
+        <div class="card-top"><span>CMPE 257 · fall 2026 · team of 3</span><span class="badge wip">results in · writing up</span></div>
         <h3>Uncertainty for TinyML in a single forward pass</h3>
-        <p>Re-implementing QUTE (ICML 2025) from the paper alone, with no reference code: two lightweight output heads on one CNN, trained by copying early-exit weights into them before every batch, so confidence falls when accuracy does without a second forward pass.</p>
+        <p>Re-implementing QUTE (ICML 2025) from the paper alone, with no reference code: two lightweight output heads on one CNN, trained by copying early-exit weights into them before every batch, so confidence falls when accuracy does without a second forward pass. Our reproduction agrees with the paper on calibration and cost, but not on everything.</p>
         <ul>
           <li>I own the <b>model and the shared interface</b>: the base CNN and prediction contract the rest of the team builds against, then the early-exit branches, output blocks, weight-transfer training loop, and the ablation that removes it.</li>
-          <li>Comparing against softmax confidence, MC Dropout, and deep ensembles on calibration, label-free accuracy-drop detection across 15 corruptions, and parameter cost.</li>
+          <li>Across three seeds and 15 MNIST-C corruptions, QUTE is the <b>best calibrated</b> of the four methods (ECE 0.226 against 0.265 for a two-member ensemble and 0.282 for plain softmax) at <b>1.13&times; the CPU time</b> of a single model, where the ensemble and MC Dropout cost about 2&times;.</li>
+          <li>It does <b>not beat the two-member ensemble</b> at detecting accuracy drops (average precision 0.846 against 0.854). I shrank the CNN to 1,066 parameters to match the paper's weaker base model and wrote down a prediction first. The gap widened, so the prediction failed, and that goes in the report as it is.</li>
+          <li>Still to come: paired bootstrap significance tests on those gaps, then the report.</li>
         </ul>
+        <div class="metrics">
+          <div class="metric"><b>0.226</b><span>MNIST-C ECE, lowest of 4</span></div>
+          <div class="metric"><b>1.13&times;</b><span>CPU time vs. one model</span></div>
+          <div class="metric"><b>15</b><span>corruptions · 3 seeds</span></div>
+        </div>
         <div class="chips"><span class="chip">PyTorch</span><span class="chip">MNIST-C</span><span class="chip">ECE · NLL · AUPRC</span></div>
+        <div class="links"><a href="https://github.com/cmpe257-qute-sjsu/mnistc-uncertainty-qute" target="_blank" rel="noopener">github repo ↗</a></div>
       </article>
       <article class="card wide reveal" data-tags="llm data">
         <div class="card-top"><span>independent · summer 2026</span><span class="badge live">shipped</span></div>
@@ -384,6 +396,7 @@ footer{padding-block:30px 50px;color:var(--muted);font:12.5px var(--mono);text-a
         <h3>Leadership &amp; now, AI <small>· 2012 – present</small></h3>
         <ul>
           <li><b>M.S. Artificial Intelligence</b>, San José State University, Jan 2026 – Dec 2027 (expected): evaluation and efficiency work on quantized robot policies, audio deepfake detectors, and TinyML uncertainty.</li>
+          <li><b>Graduate Research Assistant</b>, San José State University (Nov 2026 – present): working with Prof. Weizhi Lin on machine learning methods to assess speech disorders in children from face video.</li>
           <li><b>Program Manager</b>, PlayCV (2022–2025): ran operations across 5 sites and 90+ staff.</li>
           <li><b>Founder</b>, independent arts education studio (2012–2022).</li>
         </ul>
